@@ -53,11 +53,5 @@ The demo `SmartHomeClient` exercises these steps: it triggers a morning routine,
 - **Concurrency**: Thread-safety could be enhanced by wrapping history access in synchronized blocks or using concurrent stacks if multiple schedulers or GUIs interact concurrently.
 - **Persistence**: Histories could be serialized to support system restarts or remote coordination.
 
-## 10. Testing Guidelines
-- Exercise each command individually and verify that undo reverses side effects.
-- Validate macro commands undo correctly by observing output order.
-- Confirm redo only operates after an undo and that new executions clear redo history.
-- Use scheduled commands in `SmartHomeClient`; ensure commands execute after the delay and appear in undo history.
-
-## 11. Conclusion
+## 10. Conclusion
 The refactored architecture demonstrates the Command pattern’s advantages for distributed automation: it decouples invokers from receivers, centralizes undo/redo logic, and supports composition and scheduling. The solution is ready for further enhancements such as device discovery or remote invocation without structural changes to the core command framework.
