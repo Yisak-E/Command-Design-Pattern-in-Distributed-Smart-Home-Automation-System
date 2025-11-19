@@ -1,0 +1,166 @@
+@startuml SmartHomeCommandDiagram
+skinparam classAttributeIconSize 0
+
+interface Command {
+    +execute()
+    +undo()
+}
+
+class MacroCommand {
+    -commands : List<Command>
+    +MacroCommand(commands : List<Command>)
+    +execute()
+    +undo()
+    +getCommands() : List<Command>
+}
+
+class NoCommand {
+    +execute()
+    +undo()
+}
+
+class SmartHomeInvoker {
+    -commandRegistry : Map<String, Command>
+    -undoHistory : Deque<Command>
+    -redoHistory : Deque<Command>
+    -defaultCommand : Command
+    +setDefaultCommand(defaultCommand : Command)
+    +registerCommand(key : String, command : Command)
+    +getRegisteredCommand(key : String) : Optional<Command>
+    +execute(key : String)
+    +execute(command : Command)
+    +undo() : boolean
+    +redo() : boolean
+    +clearHistory()
+}
+
+class CommandScheduler {
+    -invoker : SmartHomeInvoker
+    -executor : ScheduledExecutorService
+    +CommandScheduler(invoker : SmartHomeInvoker)
+    +schedule(command : Command, delay : long, unit : TimeUnit) : ScheduledFuture
+    +close()
+}
+
+class Light {
+    -on : boolean
+    +turnOn()
+    +turnOff()
+    +isOn() : boolean
+}
+
+class AirConditioner {
+    -on : boolean
+    -temperature : int
+    +turnOn()
+    +turnOff()
+    +setTemperature(temperature : int)
+    +isOn() : boolean
+    +getTemperature() : int
+}
+
+class DoorLock {
+    -locked : boolean
+    +lock()
+    +unlock()
+    +isLocked() : boolean
+}
+
+class MusicPlayer {
+    -playing : boolean
+    +play()
+    +stop()
+    +isPlaying() : boolean
+}
+
+class TurnOnLightCommand {
+    -light : Light
+    +TurnOnLightCommand(light : Light)
+    +execute()
+    +undo()
+}
+
+class TurnOffLightCommand {
+    -light : Light
+    +TurnOffLightCommand(light : Light)
+    +execute()
+    +undo()
+}
+
+class TurnOnAirConditionerCommand {
+    -airConditioner : AirConditioner
+    +TurnOnAirConditionerCommand(airConditioner : AirConditioner)
+    +execute()
+    +undo()
+}
+
+class TurnOffAirConditionerCommand {
+    -airConditioner : AirConditioner
+    +TurnOffAirConditionerCommand(airConditioner : AirConditioner)
+    +execute()
+    +undo()
+}
+
+class SetAirConditionerTemperatureCommand {
+    -airConditioner : AirConditioner
+    -newTemperature : int
+    -previousTemperature : int
+    +SetAirConditionerTemperatureCommand(airConditioner : AirConditioner, newTemperature : int)
+    +execute()
+    +undo()
+}
+
+class LockDoorCommand {
+    -doorLock : DoorLock
+    +LockDoorCommand(doorLock : DoorLock)
+    +execute()
+    +undo()
+}
+
+class UnlockDoorCommand {
+    -doorLock : DoorLock
+    +UnlockDoorCommand(doorLock : DoorLock)
+    +execute()
+    +undo()
+}
+
+class PlayMusicCommand {
+    -musicPlayer : MusicPlayer
+    +PlayMusicCommand(musicPlayer : MusicPlayer)
+    +execute()
+    +undo()
+}
+
+class StopMusicCommand {
+    -musicPlayer : MusicPlayer
+    +StopMusicCommand(musicPlayer : MusicPlayer)
+    +execute()
+    +undo()
+}
+
+Command <|.. MacroCommand
+Command <|.. NoCommand
+Command <|.. TurnOnLightCommand
+Command <|.. TurnOffLightCommand
+Command <|.. TurnOnAirConditionerCommand
+Command <|.. TurnOffAirConditionerCommand
+Command <|.. SetAirConditionerTemperatureCommand
+Command <|.. LockDoorCommand
+Command <|.. UnlockDoorCommand
+Command <|.. PlayMusicCommand
+Command <|.. StopMusicCommand
+
+MacroCommand o-- Command
+SmartHomeInvoker --> Command
+CommandScheduler --> SmartHomeInvoker
+TurnOnLightCommand --> Light
+TurnOffLightCommand --> Light
+TurnOnAirConditionerCommand --> AirConditioner
+TurnOffAirConditionerCommand --> AirConditioner
+SetAirConditionerTemperatureCommand --> AirConditioner
+LockDoorCommand --> DoorLock
+UnlockDoorCommand --> DoorLock
+PlayMusicCommand --> MusicPlayer
+StopMusicCommand --> MusicPlayer
+
+@enduml
