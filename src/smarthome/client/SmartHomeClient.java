@@ -1,7 +1,6 @@
 package smarthome.client;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -26,9 +25,11 @@ import smarthome.scheduler.CommandScheduler;
 
 // Client: wires receivers, commands, and invoker to demonstrate the Command pattern workflow.
 public final class SmartHomeClient {
+    // Prevents instantiation of the utility class.
     private SmartHomeClient() {
     }
 
+    // Entry point that launches the interactive console demo.
     public static void main(String[] args) throws InterruptedException {
         Light light = new Light();
         AirConditioner airConditioner = new AirConditioner();
@@ -85,7 +86,7 @@ public final class SmartHomeClient {
                 Map.entry("11", "routine:night"));
 
         try (Scanner scanner = new Scanner(System.in);
-                CommandScheduler scheduler = new CommandScheduler(invoker)) {
+            CommandScheduler scheduler = new CommandScheduler(invoker)) {
             boolean running = true;
             printWelcome();
 
@@ -93,7 +94,7 @@ public final class SmartHomeClient {
                 printMenu();
                 System.out.print("Select action: ");
                 String input = scanner.nextLine().trim();
-                String normalized = input.toLowerCase(Locale.ROOT);
+                String normalized = input.toLowerCase();
 
                 switch (normalized) {
                     case "u":
@@ -135,29 +136,32 @@ public final class SmartHomeClient {
         System.out.println("Shutting down Smart Home client.");
     }
 
+    // Prints an introduction explaining the demo purpose.
     private static void printWelcome() {
         System.out.println("Smart Home Automation Console");
         System.out.println("Commands demonstrate the Command pattern with undo/redo support.\n");
     }
 
+    // Lists the available user actions.
     private static void printMenu() {
-                String border = "+" + "─".repeat(10) + "+" + "─".repeat(18) + "+" + "─".repeat(10) + "+" + "─".repeat(18) + "+";
+        String border = "+" + "─".repeat(10) + "+" + "─".repeat(18) + "+" + "─".repeat(10) + "+" + "─".repeat(18) + "+";
 
-                System.out.println(border);
-                System.out.printf("|%-10s|%-18s|%-10s|%-18s|\n", " Command", " Action", " Command", " Action");
-                System.out.println(border);
+        System.out.println(border);
+        System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n", " Command", " Action", " Command", " Action");
+        System.out.println(border);
 
-                System.out.printf("|%-10s|%-18s|%-10s|%-18s|\n", " 1", " Light On", " 2", " Light Off");
-                System.out.printf("|%-10s|%-18s|%-10s|%-18s|\n", " 3", " Door Unlock", " 4", " Door Lock");
-                System.out.printf("|%-10s|%-18s|%-10s|%-18s|\n", " 5", " AC On", " 6", " AC Off");
-                System.out.printf("|%-10s|%-18s|%-10s|%-18s|\n", " 7", " AC Cool (20°C)", " 8", " Music Play");
-                System.out.printf("|%-10s|%-18s|%-10s|%-18s|\n", " 9", " Music Stop", " 10", " Morning Routine");
-                System.out.printf("|%-10s|%-18s|%-10s|%-18s|\n", " 11", " Night Routine", " u", " Undo");
-                System.out.printf("|%-10s|%-18s|%-10s|%-18s|\n", " r", " Redo", " s", " Schedule Stop");
-                System.out.printf("|%-10s|%-18s|%-10s|%-18s|\n", " q", " Quit", "", "");
-                System.out.println(border);
+        System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n", " 1", " Light On", " 2", " Light Off");
+        System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n", " 3", " Door Unlock", " 4", " Door Lock");
+        System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n", " 5", " AC On", " 6", " AC Off");
+        System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n", " 7", " AC Cool (20°C)", " 8", " Music Play");
+        System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n", " 9", " Music Stop", " 10", " Morning Routine");
+        System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n", " 11", " Night Routine", " u", " Undo");
+        System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n", " r", " Redo", " s", " Schedule Stop");
+        System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n", " q", " Quit", "", "");
+        System.out.println(border);
     }
 
+    // Shows current device states after each command.
     private static void printDeviceState(Light light, AirConditioner ac, DoorLock lock, MusicPlayer player) {
         System.out.printf("Light: %s | Door: %s | AC: %s (%d°C) | Music: %s%n",
                 light.isOn() ? "ON" : "OFF",
@@ -168,6 +172,7 @@ public final class SmartHomeClient {
         System.out.println();
     }
 
+    // Collects a delay and schedules the stop music command.
     private static void scheduleStopMusic(Scanner scanner, CommandScheduler scheduler, Command stopMusic)
             throws InterruptedException {
         System.out.print("Enter delay in seconds (default 2): ");

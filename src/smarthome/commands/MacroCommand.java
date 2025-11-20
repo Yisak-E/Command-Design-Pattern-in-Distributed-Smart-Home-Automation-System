@@ -8,10 +8,12 @@ import java.util.List;
 public class MacroCommand implements Command {
     private final List<Command> commands;
 
+    // Captures a defensive copy of the provided command list.
     public MacroCommand(List<Command> commands) {
         this.commands = new ArrayList<>(commands);
     }
 
+    // Executes each child command in insertion order.
     @Override
     public void execute() {
         for (Command command : commands) {
@@ -19,6 +21,7 @@ public class MacroCommand implements Command {
         }
     }
 
+    // Undoes each child command in reverse order for safety.
     @Override
     public void undo() {
         List<Command> reversed = new ArrayList<>(commands);
@@ -28,6 +31,7 @@ public class MacroCommand implements Command {
         }
     }
 
+    // Exposes an immutable view of the macro's contents.
     public List<Command> getCommands() {
         return Collections.unmodifiableList(commands);
     }

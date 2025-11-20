@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import smarthome.commands.Command;
 import smarthome.invoker.SmartHomeInvoker;
 
+// Scheduler: defers command execution using a single-threaded executor.
 public class CommandScheduler implements AutoCloseable {
     private final SmartHomeInvoker invoker;
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> {
@@ -18,16 +19,19 @@ public class CommandScheduler implements AutoCloseable {
         return thread;
     });
 
+    // Creates a scheduler that delegates back to the given invoker.
     public CommandScheduler(SmartHomeInvoker invoker) {
         this.invoker = Objects.requireNonNull(invoker);
     }
 
+    // Schedules a command after the requested delay.
     public ScheduledFuture<?> schedule(Command command, long delay, TimeUnit unit) {
         Objects.requireNonNull(command);
         Objects.requireNonNull(unit);
         return executor.schedule(() -> invoker.execute(command), delay, unit);
     }
 
+    // Shuts down the underlying executor immediately.
     @Override
     public void close() {
         executor.shutdownNow();
