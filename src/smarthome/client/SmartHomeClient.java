@@ -3,11 +3,10 @@ package smarthome.client;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 import smarthome.commands.Command;
 import smarthome.commands.LockDoorCommand;
-import smarthome.commands.MacroCommand;
+import smarthome.commands.GeneralCommand;
 import smarthome.commands.PlayMusicCommand;
 import smarthome.commands.SetAirConditionerTemperatureCommand;
 import smarthome.commands.StopMusicCommand;
@@ -21,16 +20,12 @@ import smarthome.devices.DoorLock;
 import smarthome.devices.Light;
 import smarthome.devices.MusicPlayer;
 import smarthome.invoker.SmartHomeInvoker;
-import smarthome.scheduler.CommandScheduler;
 
 // Client: wires receivers, commands, and invoker to demonstrate the Command pattern workflow.
 public final class SmartHomeClient {
-    // Prevents instantiation of the utility class.
-    private SmartHomeClient() {
-    }
 
     // Entry point that launches the interactive console demo.
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         Light light = new Light();
         AirConditioner airConditioner = new AirConditioner();
         DoorLock doorLock = new DoorLock();
@@ -46,14 +41,14 @@ public final class SmartHomeClient {
         PlayMusicCommand playMusic = new PlayMusicCommand(musicPlayer);
         StopMusicCommand stopMusic = new StopMusicCommand(musicPlayer);
 
-        Command morningRoutine = new MacroCommand(List.of(
+        Command morningRoutine = new GeneralCommand(List.of(
                 doorUnlock,
                 lightOn,
                 acOn,
                 acCool,
                 playMusic));
 
-        Command nightRoutine = new MacroCommand(List.of(
+        Command nightRoutine = new GeneralCommand(List.of(
                 lightOff,
                 stopMusic,
                 acOff,
@@ -85,10 +80,11 @@ public final class SmartHomeClient {
                 Map.entry("10", "routine:morning"),
                 Map.entry("11", "routine:night"));
 
-        try (Scanner scanner = new Scanner(System.in);
-            CommandScheduler scheduler = new CommandScheduler(invoker)) {
+        try (Scanner scanner = new Scanner(System.in)) {
             boolean running = true;
-            printWelcome();
+
+            System.out.println("Smart Home Automation Console");
+            System.out.println("Commands demonstrate the Command pattern with undo/redo support.\n");
 
             while (running) {
                 printMenu();
@@ -108,10 +104,6 @@ public final class SmartHomeClient {
                         if (!invoker.redo()) {
                             System.out.println("Nothing to redo.");
                         }
-                        break;
-                    case "s":
-                    case "schedule":
-                        scheduleStopMusic(scanner, scheduler, stopMusic);
                         break;
                     case "q":
                     case "quit":
@@ -134,12 +126,6 @@ public final class SmartHomeClient {
         }
 
         System.out.println("Shutting down Smart Home client.");
-    }
-
-    // Prints an introduction explaining the demo purpose.
-    private static void printWelcome() {
-        System.out.println("Smart Home Automation Console");
-        System.out.println("Commands demonstrate the Command pattern with undo/redo support.\n");
     }
 
     // Lists the available user actions.
@@ -170,23 +156,5 @@ public final class SmartHomeClient {
                 ac.getTemperature(),
                 player.isPlaying() ? "Playing" : "Stopped");
         System.out.println();
-    }
-
-    // Collects a delay and schedules the stop music command.
-    private static void scheduleStopMusic(Scanner scanner, CommandScheduler scheduler, Command stopMusic)
-            throws InterruptedException {
-        System.out.print("Enter delay in seconds (default 2): ");
-        String value = scanner.nextLine().trim();
-        long delay = 2L;
-        if (!value.isEmpty()) {
-            try {
-                delay = Long.parseLong(value);
-            } catch (NumberFormatException ex) {
-                System.out.println("Invalid number. Using default delay of 2 seconds.");
-            }
-        }
-
-        scheduler.schedule(stopMusic, delay, TimeUnit.SECONDS);
-        System.out.println("Stop music command scheduled in " + delay + " second(s).");
     }
 }

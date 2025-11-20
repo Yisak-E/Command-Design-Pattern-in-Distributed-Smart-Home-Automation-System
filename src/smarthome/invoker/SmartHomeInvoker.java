@@ -5,21 +5,18 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 import smarthome.commands.Command;
-import smarthome.commands.NoCommand;
 
 // Invoker: stores command mappings and manages undo/redo history.
 public class SmartHomeInvoker {
     private final Map<String, Command> commandRegistry = new HashMap<>();
     private final Deque<Command> undoHistory = new ArrayDeque<>();
     private final Deque<Command> redoHistory = new ArrayDeque<>();
-    private Command defaultCommand = new NoCommand();
 
-    // Changes the default fallback command used for missing keys.
-    public void setDefaultCommand(Command defaultCommand) {
-        this.defaultCommand = Objects.requireNonNull(defaultCommand);
+    //set default command
+    public void setDafaultCommand(Command defCommand) {
+        commandRegistry.put("default", Objects.requireNonNull(defCommand));
     }
 
     // Registers a command under a string key.
@@ -27,14 +24,10 @@ public class SmartHomeInvoker {
         commandRegistry.put(key, Objects.requireNonNull(command));
     }
 
-    // Retrieves a previously registered command if present.
-    public Optional<Command> getRegisteredCommand(String key) {
-        return Optional.ofNullable(commandRegistry.get(key));
-    }
 
     // Executes a command identified by key and records it in history.
     public void execute(String key) {
-        Command command = commandRegistry.getOrDefault(key, defaultCommand);
+        Command command = commandRegistry.get(key);
         execute(command);
     }
 

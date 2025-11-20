@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-// Composite command: groups multiple commands into a reusable routine.
-public class MacroCommand implements Command {
+//  groups multiple commands into a reusable routine.
+public class GeneralCommand implements Command {
     private final List<Command> commands;
 
     // Captures a defensive copy of the provided command list.
-    public MacroCommand(List<Command> commands) {
+    public GeneralCommand(List<Command> commands) {
         this.commands = new ArrayList<>(commands);
     }
 
