@@ -1,6 +1,6 @@
 package smarthome.commands;
 
-import smarthome.devices.DoorLock;
+import smarthome.receiver.DoorLock;
 
 // Concrete command: secures the door lock.
 public class LockDoorCommand implements Command {

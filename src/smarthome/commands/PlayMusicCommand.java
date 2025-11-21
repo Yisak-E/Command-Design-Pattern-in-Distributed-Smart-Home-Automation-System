@@ -1,6 +1,6 @@
 package smarthome.commands;
 
-import smarthome.devices.MusicPlayer;
+import smarthome.receiver.MusicPlayer;
 
 // Concrete command: starts playback on the music player.
 public class PlayMusicCommand implements Command {

@@ -1,4 +1,4 @@
-package smarthome.devices;
+package smarthome.receiver;
 
 // Receiver: represents a smart door lock.
 public class DoorLock {

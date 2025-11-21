@@ -1,6 +1,6 @@
 package smarthome.commands;
 
-import smarthome.devices.Light;
+import smarthome.receiver.Light;
 
 // Concrete command: switches a light off via its receiver.
 public class TurnOffLightCommand implements Command {

@@ -1,6 +1,6 @@
 package smarthome.commands;
 
-import smarthome.devices.MusicPlayer;
+import smarthome.receiver.MusicPlayer;
 
 // Concrete command: stops playback on the music player.
 public class StopMusicCommand implements Command {

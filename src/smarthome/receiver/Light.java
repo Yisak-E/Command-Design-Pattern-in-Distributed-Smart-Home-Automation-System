@@ -1,4 +1,4 @@
-package smarthome.devices;
+package smarthome.receiver;
 
 // Receiver: models a simple light fixture.
 public class Light {

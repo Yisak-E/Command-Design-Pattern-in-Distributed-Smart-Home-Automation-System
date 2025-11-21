@@ -1,6 +1,6 @@
 package smarthome.commands;
 
-import smarthome.devices.AirConditioner;
+import smarthome.receiver.AirConditioner;
 
 // Concrete command: powers on the air conditioner.
 public class TurnOnAirConditionerCommand implements Command {

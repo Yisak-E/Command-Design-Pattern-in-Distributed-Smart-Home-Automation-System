@@ -1,4 +1,4 @@
-package smarthome.devices;
+package smarthome.receiver;
 
 // Receiver: drives audio playback.
 public class MusicPlayer {

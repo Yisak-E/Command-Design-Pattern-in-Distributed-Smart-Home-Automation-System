@@ -1,4 +1,4 @@
-package smarthome.devices;
+package smarthome.receiver;
 
 // Receiver: controls the air conditioner unit.
 public class AirConditioner {

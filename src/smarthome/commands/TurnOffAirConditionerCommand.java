@@ -1,6 +1,6 @@
 package smarthome.commands;
 
-import smarthome.devices.AirConditioner;
+import smarthome.receiver.AirConditioner;
 
 // Concrete command: powers down the air conditioner.
 public class TurnOffAirConditionerCommand implements Command {
