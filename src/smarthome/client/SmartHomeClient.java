@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import smarthome.commands.Command;
 import smarthome.commands.LockDoorCommand;
-import smarthome.commands.GeneralCommand;
+import smarthome.commands.MacroCommand;
 import smarthome.commands.PlayMusicCommand;
 import smarthome.commands.StopMusicCommand;
 import smarthome.commands.TurnOffAirConditionerCommand;
@@ -39,13 +39,13 @@ public final class SmartHomeClient {
         PlayMusicCommand playMusic = new PlayMusicCommand(musicPlayer);
         StopMusicCommand stopMusic = new StopMusicCommand(musicPlayer);
 
-        Command morningRoutine = new GeneralCommand(List.of(
+        Command morningRoutine = new MacroCommand(List.of(
                 doorUnlock,
                 lightOn,
                 acOn,
                 playMusic));
 
-        Command nightRoutine = new GeneralCommand(List.of(
+        Command nightRoutine = new MacroCommand(List.of(
                 lightOff,
                 stopMusic,
                 acOff,
@@ -137,17 +137,16 @@ public final class SmartHomeClient {
         System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n",  " 7", " Music Play", " 8", " Music Stop" );
         System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n",  " 9", " Morning Routine", " 10", " Night Routine");
         System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n",  " u", " Undo", " r", " Redo");
-        System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n",  " s", " Schedule Stop",  " q", " Quit");
+        System.out.printf("|%-10s|%-18s|%-10s|%-18s|%n",  " q", " Quit", "", " ");
         System.out.println(border);
     }
 
     // Shows current device states after each command.
     private static void printDeviceState(Light light, AirConditioner ac, DoorLock lock, MusicPlayer player) {
-        System.out.printf("Light: %s | Door: %s | AC: %s (%d°C) | Music: %s%n",
+        System.out.printf("Light: %s | Door: %s | AC: %s  | Music: %s%n",
                 light.isOn() ? "ON" : "OFF",
                 lock.isLocked() ? "Locked" : "Unlocked",
                 ac.isOn() ? "ON" : "OFF",
-                ac.getTemperature(),
                 player.isPlaying() ? "Playing" : "Stopped");
         System.out.println();
     }
